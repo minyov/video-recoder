@@ -95,6 +95,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# CELERY
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 if IS_DEV_ENVIRONMENT:
     from .settings_dev import *
 else:

@@ -31,3 +31,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+CELERY_BROKER_URL = 'amqp://stepik:stepik@localhost:5672/stepik'
+CELERY_RESULT_BACKEND = 'amqp://stepik:stepik@localhost:5672/stepik'
