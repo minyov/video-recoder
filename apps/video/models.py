@@ -9,6 +9,10 @@ from apps.core.models import TimeStampedModel
 
 @deconstructible
 class UploadTo:
+    """
+    Class to control paths of storing files.
+    """
+
     def __init__(self, route: str):
         self.route = route
 
@@ -19,15 +23,14 @@ class UploadTo:
             ext = None
 
         if instance.id and instance.file:
-            instance_filename = instance.file.name.split("/")[-1]
-            filename = instance_filename.split('.')[0]
+            file_name = instance.file_name
         else:
-            filename = md5((str(timezone.now()) + filename).encode()).hexdigest()
+            file_name = md5((str(timezone.now()) + filename).encode()).hexdigest()
 
         if ext:
-            filename += f'.{ext.lower()}'
+            file_name += f'.{ext.lower()}'
 
-        return f'{self.route}/{filename}'
+        return f'{self.route}/{file_name}'
 
 
 class Video(TimeStampedModel):
@@ -40,3 +43,15 @@ class Video(TimeStampedModel):
 
     def __str__(self):
         return f'{self.id} {self.name}'
+
+    @property
+    def full_file_name(self):
+        return self.file.name.split('/')[-1]
+
+    @property
+    def file_name(self):
+        return self.full_file_name.split('.')[0]
+
+    @property
+    def file_ext(self):
+        return self.full_file_name.split('.')[-1]

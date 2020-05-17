@@ -1,12 +1,17 @@
 import os
 import cv2
 import tempfile
+import uuid
 
 from django.db.models.fields.files import FieldFile
 
 
 def get_preview(file: FieldFile) -> bytes:
-    temp_filename = os.path.join(tempfile.gettempdir(), file.name.split('/')[-1])
+    """
+    Retrieves frame from the middle of video as preview image
+    """
+
+    temp_filename = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
     with open(temp_filename, "wb") as _file:
         file.seek(0)
         _file.write(file.read())
