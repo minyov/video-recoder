@@ -1,5 +1,7 @@
 import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DEBUG = False
 
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -33,6 +35,8 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 RABBITMQ_USER = os.getenv('RABBITMQ_USER')
 RABBITMQ_PASSWORD = os.getenv('RABBITMQ_PASSWORD')
