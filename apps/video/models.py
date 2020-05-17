@@ -34,15 +34,14 @@ class UploadTo:
 
 
 class Video(TimeStampedModel):
-    name = models.CharField(max_length=100)
-
-    file = models.FileField(upload_to=UploadTo('originals'))
+    url = models.URLField(null=True, blank=True)
+    file = models.FileField(upload_to=UploadTo('originals'), null=True, blank=True)
     preview = models.ImageField(upload_to=UploadTo('previews'), null=True, blank=True)
     mp4 = models.FileField(upload_to=UploadTo('mp4'), null=True, blank=True)
     webm = models.FileField(upload_to=UploadTo('webm'), null=True, blank=True)
 
     def __str__(self):
-        return f'{self.id} {self.name}'
+        return str(self.id)
 
     @property
     def full_file_name(self):
