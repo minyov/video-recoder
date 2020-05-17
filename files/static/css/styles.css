@@ -1,0 +1,40 @@
+#dummyframe {
+    width: 0;
+    height: 0;
+    position: fixed;
+    top: -99999px;
+}
+
+#videos-container,
+#forms-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#forms-container > div {
+    width: 640px;
+}
+
+#forms-container > div > form {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    border: 1px solid gray;
+}
+
+form input {
+    width: 50%;
+    margin: 5px;
+}
+
+.video-container {
+    max-height: 360px;
+    max-width: 640px;
+    margin: 10px 0;
+}
+
+.video-container > img {
+    height: 360px;
+    width: 640px;
+}
