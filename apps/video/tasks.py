@@ -2,6 +2,8 @@ import os
 import tempfile
 import uuid
 import ffmpeg
+import requests
+import mimetypes
 
 from stepik.celery import app
 
@@ -52,3 +54,22 @@ def recode_video(video_id: int, ext: str):
         print(e)
     finally:
         os.remove(temp_filepath)
+
+
+@app.task
+def download_video_file(video_id: int):
+    """
+    Downloads video file from Video object url and saves it to Video object file.
+    """
+
+    video = Video.objects.get(id=video_id)
+
+    try:
+        response = requests.get(video.url)
+        mime_type = response.headers['Content-Type']
+        ext = mimetypes.guess_extension(mime_type)
+        file_content = ContentFile(response.content)
+
+        video.file.save(f'video.{ext}', file_content)
+    except Exception as e:
+        print(e)
