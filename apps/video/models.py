@@ -40,6 +40,9 @@ class Video(TimeStampedModel):
     mp4 = models.FileField(upload_to=UploadTo('mp4'), null=True, blank=True)
     webm = models.FileField(upload_to=UploadTo('webm'), null=True, blank=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return str(self.id)
 
