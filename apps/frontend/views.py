@@ -1,4 +1,4 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render
 from django.views import View
 
 from apps.video.models import Video
