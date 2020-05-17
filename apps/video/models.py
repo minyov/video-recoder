@@ -54,3 +54,7 @@ class Video(TimeStampedModel):
     @property
     def file_ext(self):
         return self.full_file_name.split('.')[-1]
+
+    @property
+    def processed(self):
+        return all((self.file, self.preview, self.mp4, self.webm))
