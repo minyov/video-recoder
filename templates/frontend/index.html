@@ -13,13 +13,12 @@
 <body>
 <div id="forms-container">
     <div>
-        <form method="post" enctype="multipart/form-data" action="/v1/videos/"
-              target="dummyframe">
+        <form id="file-form" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" name="file" accept="video/mp4, video/avi, video.webm">
+            <input type="file" id="file-input" name="file" accept="video/mp4, video/avi, video.webm">
             <input id="file-submit" type="button" name="submit" value="Отправить">
         </form>
-        <form method="post" id="url-form" action="">
+        <form id="url-form" method="post" action="">
             {% csrf_token %}
             <input type="url" name="url" placeholder="Вставьте ссылку на файл">
             <input id="url-submit" type="button" name="submit" value="Отправить">
@@ -46,6 +45,5 @@
         </div>
     {% endfor %}
 </div>
-<iframe name="dummyframe" id="dummyframe"></iframe>
 </body>
 </html>
