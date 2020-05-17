@@ -4,6 +4,7 @@ import uuid
 import ffmpeg
 import requests
 import mimetypes
+import logging
 
 from stepik.celery import app
 
@@ -13,8 +14,10 @@ from utils import video_processor, image_processor
 
 from .models import Video
 
+logger = logging.getLogger(__name__)
 
-@app.task
+
+@app.task(max_retries=3, autoretry_for=[Exception], retry_backoff=60)
 def create_preview(video_id: int):
     video = Video.objects.get(id=video_id)
 
@@ -30,7 +33,7 @@ def create_preview(video_id: int):
         Video.objects.filter(id=video_id).update(preview=video.preview)
 
 
-@app.task
+@app.task(max_retries=3, autoretry_for=[Exception], retry_backoff=60)
 def recode_video(video_id: int, ext: str):
     """
     Recodes video from original format to destination format (ext).
@@ -51,12 +54,13 @@ def recode_video(video_id: int, ext: str):
             getattr(video, ext).save(f'video.{ext}', File(file), save=False)
             Video.objects.filter(id=video_id).update(**{ext: getattr(video, ext)})
     except Exception as e:
-        print(e)
+        logger.error('Recode video error: ', exc_info=True)
+        raise
     finally:
         os.remove(temp_filepath)
 
 
-@app.task
+@app.task(max_retries=3, autoretry_for=[Exception], retry_backoff=60)
 def download_video_file(video_id: int):
     """
     Downloads video file from Video object url and saves it to Video object file.
@@ -72,4 +76,5 @@ def download_video_file(video_id: int):
 
         video.file.save(f'video.{ext}', file_content)
     except Exception as e:
-        print(e)
+        logger.error('Download video file error: ', exc_info=True)
+        raise
