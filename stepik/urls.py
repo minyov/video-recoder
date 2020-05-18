@@ -8,6 +8,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'', include('apps.frontend.urls')),
+    url(r'', include('apps.core.urls')),
     url(r'^v1/', include('apps.video.urls')),
     url(r'^admin/', admin.site.urls),
 ]
