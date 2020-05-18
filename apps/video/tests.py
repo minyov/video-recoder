@@ -1,6 +1,6 @@
 from django.test import TransactionTestCase
 
-from . import models, tasks
+from apps.video import models, tasks, enums
 
 
 class TestVideoModel(TransactionTestCase):
@@ -60,33 +60,72 @@ class TestVideoModel(TransactionTestCase):
 
 
 class TestDownloadVideo(TransactionTestCase):
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         url = 'http://mirrors.standaloneinstaller.com/video-sample/small.3gp'
         wrong_mime_type_url = 'http://mirrors.standaloneinstaller.com/video-sample/grb_2.wmv'
 
-        cls.url_video = models.Video.objects.create(
+        self.url_video = models.Video.objects.create(
             url=url,
         )
 
-        cls.wrong_mime_type_video = models.Video.objects.create(
+        self.wrong_mime_type_video = models.Video.objects.create(
             url=wrong_mime_type_url,
         )
 
     def test_download(self):
         self.assertFalse(self.url_video.file)
-
         tasks.download_video_file(video_id=self.url_video.id)
-
         self.url_video.refresh_from_db()
-
         self.assertTrue(self.url_video.file)
 
     def test_download_wrong_mime_type(self):
         self.assertFalse(self.wrong_mime_type_video.file)
-
         tasks.download_video_file(video_id=self.url_video.id)
-
         self.wrong_mime_type_video.refresh_from_db()
-
         self.assertFalse(self.wrong_mime_type_video.file)
+
+
+class TestRecodeVideo(TransactionTestCase):
+    def setUp(self):
+        url = 'http://mirrors.standaloneinstaller.com/video-sample/small.mp4'
+
+        self.url_video = models.Video.objects.create(
+            url=url,
+        )
+        tasks.download_video_file(video_id=self.url_video.id)
+        self.url_video.refresh_from_db()
+
+    def test_recode_to_mp4(self):
+        self.assertTrue(self.url_video.file)
+
+        self.assertFalse(self.url_video.mp4)
+        tasks.recode_video(video_id=self.url_video.id, ext=enums.VideoMimeTypeEnum.MP4.value)
+        self.url_video.refresh_from_db()
+        self.assertTrue(self.url_video.mp4)
+
+    def test_recode_to_webm(self):
+        self.assertTrue(self.url_video.file)
+
+        self.assertFalse(self.url_video.webm)
+        tasks.recode_video(video_id=self.url_video.id, ext=enums.VideoMimeTypeEnum.WEBM.value)
+        self.url_video.refresh_from_db()
+        self.assertTrue(self.url_video.webm)
+
+
+class TestCreatePreview(TransactionTestCase):
+    def setUp(self):
+        url = 'http://mirrors.standaloneinstaller.com/video-sample/small.mp4'
+
+        self.url_video = models.Video.objects.create(
+            url=url,
+        )
+        tasks.download_video_file(video_id=self.url_video.id)
+        self.url_video.refresh_from_db()
+
+    def test_create_preview(self):
+        self.assertTrue(self.url_video.file)
+
+        self.assertFalse(self.url_video.preview)
+        tasks.create_preview(video_id=self.url_video.id)
+        self.url_video.refresh_from_db()
+        self.assertTrue(self.url_video.preview)
