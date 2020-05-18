@@ -7,6 +7,7 @@ ENV CONTAINER_PROJECT=/opt/stepik
 WORKDIR $CONTAINER_PROJECT
 
 RUN apt-get update && apt-get install -y daemon
+RUN apt-get install -y ffmpeg
 
 COPY . $CONTAINER_PROJECT
 
