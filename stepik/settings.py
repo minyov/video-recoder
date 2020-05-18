@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+IS_TEST_ENVIRONMENT = os.getenv('DJANGO_TEST') is not None
 IS_DEV_ENVIRONMENT = os.getenv('DJANGO_DEVELOPMENT') is not None
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -133,5 +134,7 @@ ALLOWED_VIDEO_MIME_TYPES = (
 
 if IS_DEV_ENVIRONMENT:
     from .settings_dev import *
+if IS_TEST_ENVIRONMENT:
+    from .settings_test import *
 else:
     from .settings_prod import *
