@@ -18,6 +18,11 @@ Delete from kubernetes cluster: `deploy/kubernetes/delete.sh`
 
 Requirements
 ======
+```
+RabbitMQ  
+MariaDB
+```
+
 ```requirements.txt
 Django==3.0.6
 djangorestframework==3.11.0
