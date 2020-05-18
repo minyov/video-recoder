@@ -134,7 +134,7 @@ ALLOWED_VIDEO_MIME_TYPES = (
 
 if IS_DEV_ENVIRONMENT:
     from .settings_dev import *
-if IS_TEST_ENVIRONMENT:
+elif IS_TEST_ENVIRONMENT:
     from .settings_test import *
 else:
     from .settings_prod import *
