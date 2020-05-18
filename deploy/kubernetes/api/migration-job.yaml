@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migration
+spec:
+  template:
+    spec:
+      containers:
+        - name: django
+          image: minev/stepik:0.0.13
+          command: ['python', 'manage.py', 'migrate']
+          env:
+            - name: DB_NAME
+              value: stepik_db
+            - name: DB_HOST
+              value: mariadb-service
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_password
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: secret_key
+
+      restartPolicy: Never
+  backoffLimit: 5

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maria-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-container
+  template:
+    metadata:
+      labels:
+        app: mariadb-container
+        tier: backend
+    spec:
+      containers:
+        - name: mariadb-container
+          image: mariadb:latest
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_root_password
+            - name: MYSQL_DATABASE
+              value: stepik_db
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: maria-volume-mount
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: maria-volume-mount
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

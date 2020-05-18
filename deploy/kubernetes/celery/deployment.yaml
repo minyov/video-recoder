@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stepik-celery-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stepik-celery
+  template:
+    metadata:
+      labels:
+        app: stepik-celery
+    spec:
+      containers:
+        - name: stepik
+          image: minev/stepik:0.0.13
+          ports:
+            - containerPort: 8000
+          env:
+            - name: RABBITMQ_VHOST
+              value: stepik
+            - name: RABBITMQ_HOST
+              value: rabbitmq-service
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: rabbitmq_user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: rabbitmq_password
+
+            - name: DB_NAME
+              value: stepik_db
+            - name: DB_HOST
+              value: mariadb-service
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_password
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: secret_key
+
+          command: ["/bin/bash", "deploy/entrypoints/celery.sh"]
+          volumeMounts:
+            - name: django-volume-mount
+              mountPath: /opt/stepik/public
+      volumes:
+        - name: django-volume-mount
+          persistentVolumeClaim:
+            claimName: django-pvc
