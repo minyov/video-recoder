@@ -12,7 +12,7 @@ Delete from kubernetes cluster: `deploy/kubernetes/delete.sh`
 
 Requirements
 ======
-```bash
+```requirements.txt
 Django==3.0.6
 djangorestframework==3.11.0
 mysqlclient==1.4.6
