@@ -32,16 +32,14 @@ DATABASES = {
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'PORT': os.getenv('DB_PORT', 3306),
     }
 }
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 RABBITMQ_USER = os.getenv('RABBITMQ_USER')
 RABBITMQ_PASSWORD = os.getenv('RABBITMQ_PASSWORD')
 RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
-RABBITMQ_PORT = os.getenv('RABBITMQ_PORT')
+RABBITMQ_PORT = os.getenv('RABBITMQ_PORT', 5672)
 RABBITMQ_VHOST = os.getenv('RABBITMQ_VHOST')
 
 RABBITMQ_CONNECTION_STR = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}'
