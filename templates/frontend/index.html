@@ -15,7 +15,8 @@
     <div>
         <form id="file-form" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" id="file-input" name="file" accept="video/mp4, video/avi, video.webm">
+            <input type="file" id="file-input" name="file"
+                   accept="video/mp4,video/avi,video/mov,video/3gp,video/webm">
             <input id="file-submit" type="button" name="submit" value="Отправить">
         </form>
         <form id="url-form" method="post" action="">
