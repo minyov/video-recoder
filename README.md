@@ -23,3 +23,20 @@ ffmpeg-python==0.2.0
 requests==2.23.0
 uwsgi==2.0.18
 ```
+
+Secrets Kubernetes Config Example
+======
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrets
+type: Opaque
+data:
+  db_user: c3RlcGlr
+  db_password: c3RlcGlr
+  db_root_password: c3RlcGlr
+  rabbitmq_user: c3RlcGlr
+  rabbitmq_password: c3RlcGlr
+  secret_key: c2xnbXdyKjBxdCNrYzkmOHJ1ZCoK
+```
