@@ -46,8 +46,8 @@ def recode_video(video_id: int, ext: str):
 
     try:
         input_stream = ffmpeg.input(video.file.path)
-        audio_stream = input_stream["a"].filter_("aecho", 0.8, 0.9, 1000, 0.3)
-        video_stream = input_stream["v"].filter('scale', 640, 360)
+        audio_stream = input_stream['a'].filter_('aecho', 0.8, 0.9, 1000, 0.3)
+        video_stream = input_stream['v'].filter('scale', 640, 360)
         output = ffmpeg.output(video_stream, audio_stream, temp_filepath)
         ffmpeg.run(output)
 
