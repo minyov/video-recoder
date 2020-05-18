@@ -6,6 +6,12 @@ Environment Variables
 
 Scripts
 ======
+Run app in dev:
+```bash
+export DJANGO_DEVELOPMENT=
+python3 manage.py runserver 8000  # Run api
+celery -A stepik worker -l info   # Run celery
+```
 Run tests: `python3 manage.py test apps`  
 Deploy to kubernetes cluster: `deploy/kubernetes/deploy.sh`  
 Delete from kubernetes cluster: `deploy/kubernetes/delete.sh`
