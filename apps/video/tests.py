@@ -1,6 +1,6 @@
 from django.test import TransactionTestCase
 
-from . import models
+from . import models, tasks
 
 
 class TestVideoModel(TransactionTestCase):
@@ -57,3 +57,36 @@ class TestVideoModel(TransactionTestCase):
         original_file_path = self.file_video.file.name
 
         self.assertEquals('/' + file_path, original_file_path.replace('originals', dir_name))
+
+
+class TestDownloadVideo(TransactionTestCase):
+    @classmethod
+    def setUpClass(cls):
+        url = 'http://mirrors.standaloneinstaller.com/video-sample/small.3gp'
+        wrong_mime_type_url = 'http://mirrors.standaloneinstaller.com/video-sample/grb_2.wmv'
+
+        cls.url_video = models.Video.objects.create(
+            url=url,
+        )
+
+        cls.wrong_mime_type_video = models.Video.objects.create(
+            url=wrong_mime_type_url,
+        )
+
+    def test_download(self):
+        self.assertFalse(self.url_video.file)
+
+        tasks.download_video_file(video_id=self.url_video.id)
+
+        self.url_video.refresh_from_db()
+
+        self.assertTrue(self.url_video.file)
+
+    def test_download_wrong_mime_type(self):
+        self.assertFalse(self.wrong_mime_type_video.file)
+
+        tasks.download_video_file(video_id=self.url_video.id)
+
+        self.wrong_mime_type_video.refresh_from_db()
+
+        self.assertFalse(self.wrong_mime_type_video.file)
