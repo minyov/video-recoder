@@ -17,8 +17,8 @@ $(document).ready(function () {
                 alert('Файл отправлен')
                 window.location.reload()
             },
-            error: function (xhr, resp, text) {
-                alert('Ошибка отправки файла')
+            error: function (resp) {
+                alert('Ошибка отправки файла: ' + resp.responseText)
             },
             complete: function () {
                 $("input[name='url']").val('')
@@ -43,8 +43,8 @@ $(document).ready(function () {
                 alert('Ссылка в обработке')
                 window.location.reload()
             },
-            error: function (xhr, resp, text) {
-                alert('Ошибка отправки ссылки')
+            error: function (resp) {
+                alert('Ошибка отправки ссылки: ' + resp.responseText)
             },
             complete: function () {
                 $("input[name='url']").val('')

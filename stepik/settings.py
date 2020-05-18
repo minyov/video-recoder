@@ -122,6 +122,15 @@ REST_FRAMEWORK = {
     ),
 }
 
+ALLOWED_VIDEO_MIME_TYPES = (
+    'video/mp4',
+    'video/mpeg',
+    'video/x-msvideo',
+    'video/quicktime',
+    'video/3gpp',
+    'video/webm',
+)
+
 if IS_DEV_ENVIRONMENT:
     from .settings_dev import *
 else:

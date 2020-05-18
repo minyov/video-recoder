@@ -8,6 +8,7 @@ import logging
 
 from stepik.celery import app
 
+from django.conf import settings
 from django.core.files.base import ContentFile, File
 
 from utils import video_processor, image_processor
@@ -71,10 +72,13 @@ def download_video_file(video_id: int):
     try:
         response = requests.get(video.url)
         mime_type = response.headers['Content-Type']
-        ext = mimetypes.guess_extension(mime_type)
-        file_content = ContentFile(response.content)
+        if mime_type in settings.ALLOWED_VIDEO_MIME_TYPES:
+            ext = mimetypes.guess_extension(mime_type)
+            file_content = ContentFile(response.content)
 
-        video.file.save(f'video.{ext}', file_content)
+            video.file.save(f'video.{ext}', file_content)
+        else:
+            logger.error(f'Video ({video_id}) has incorrect MIME type ({mime_type})')
     except Exception as e:
         logger.error('Download video file error: ', exc_info=True)
         raise
