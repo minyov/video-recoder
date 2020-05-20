@@ -21,6 +21,7 @@ Requirements
 ```
 RabbitMQ  
 MariaDB
+ffmpeg
 ```
 
 ```requirements.txt
